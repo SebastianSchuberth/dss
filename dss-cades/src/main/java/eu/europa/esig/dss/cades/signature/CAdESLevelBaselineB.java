@@ -67,7 +67,8 @@ import eu.europa.esig.dss.OID;
 import eu.europa.esig.dss.Policy;
 import eu.europa.esig.dss.cades.CAdESSignatureParameters;
 import eu.europa.esig.dss.cades.CMSUtils;
-import eu.europa.esig.dss.cades.SignerAttributeV2;
+import eu.europa.esig.dss.cades.signerattributesV2.SignerAttributeV2;
+import eu.europa.esig.dss.cades.signerattributesV2.SignerAttributeV2Factory;
 import eu.europa.esig.dss.utils.Utils;
 import eu.europa.esig.dss.validation.TimestampToken;
 
@@ -117,7 +118,7 @@ public class CAdESLevelBaselineB {
 		ASN1EncodableVector signedAttributes = new ASN1EncodableVector();
 		addSigningCertificateAttribute(parameters, signedAttributes);
 		addSigningTimeAttribute(parameters, signedAttributes);
-		addSignerAttribute(parameters, signedAttributes);
+		addSignerAttributeV2(parameters, signedAttributes);
 		addSignaturePolicyId(parameters, signedAttributes);
 		addContentHints(parameters, signedAttributes);
 		addContentIdentifier(parameters, signedAttributes);
@@ -147,6 +148,17 @@ public class CAdESLevelBaselineB {
 	 * @param signedAttributes
 	 * @return
 	 */
+	private void addSignerAttributeV2(final CAdESSignatureParameters parameters, final ASN1EncodableVector signedAttributes) {
+
+		SignerAttributeV2 sav2 = SignerAttributeV2Factory.getSignerAttributeV2(parameters.bLevel(), parameters.getDeterministicId(), padesUsage);
+
+        	final org.bouncycastle.asn1.cms.Attribute attribute = new org.bouncycastle.asn1.cms.Attribute(new ASN1ObjectIdentifier("0.4.0.19122.1.1"),
+                	new DERSet(sav2));
+
+        	signedAttributes.add(attribute);
+
+    	}
+
 	private void addSignerAttribute(final CAdESSignatureParameters parameters, final ASN1EncodableVector signedAttributes) {
 		// In PAdES, the role is in the signature dictionary
 		if (!padesUsage) {

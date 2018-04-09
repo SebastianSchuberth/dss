@@ -179,7 +179,7 @@
 							<goal>test</goal>
 						</goals>
 						<configuration>
-							<skipTests>false</skipTests>
+							<skipTests>true</skipTests>
 							<testFailureIgnore>false</testFailureIgnore>
 							<includes>
 								<include>eu/**/*Test.java</include>
@@ -193,7 +193,7 @@
 							<goal>test</goal>
 						</goals>
 						<configuration>
-							<skipTests>false</skipTests>
+							<skipTests>true</skipTests>
 							<testFailureIgnore>true</testFailureIgnore>
 							<includes>
 								<include>plugtests/**/*Test.java</include>
@@ -207,7 +207,7 @@
 							<goal>test</goal>
 						</goals>
 						<configuration>
-							<skipTests>false</skipTests>
+							<skipTests>true</skipTests>
 							<testFailureIgnore>true</testFailureIgnore>
 							<includes>
 								<include>known/issues/**/*Test.java</include>

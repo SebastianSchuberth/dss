@@ -51,6 +51,8 @@ public class BLevelParameters implements Serializable {
 	private Date signingDate = new Date();
 
 	private List<String> claimedSignerRoles;
+	private List<String> certifiedSignerRoles;
+	private List<String> signedAssertions;
 
 	private Policy signaturePolicy;
 
@@ -137,6 +139,25 @@ public class BLevelParameters implements Serializable {
 	}
 
 	/**
+	 * Set a list of certified signer roles
+	 * 
+	 * @param certifiedSignerRoles
+	 *            a list of certified signer roles
+	 */
+	public void setCertifiedSignerRoles(List<String> certifiedSignerRoles) {
+		this.certifiedSignerRoles = certifiedSignerRoles;
+	}
+
+	/**
+	 * Get certified roles
+	 *
+	 * @return the list of certified roles
+	 */
+	public List<String> getCertifiedSignerRoles() {
+		return certifiedSignerRoles;
+	}
+
+	/**
 	 * Get the commitment type indications
 	 * 
 	 * @return the list of commitment type indications
@@ -146,7 +167,7 @@ public class BLevelParameters implements Serializable {
 	}
 
 	/**
-	 * Set the commitment type indications (predefined values are available in {@code CommitmentType})
+	 * Set the commitment type indications
 	 * 
 	 * @param commitmentTypeIndications
 	 *            a list of commitment type indications
@@ -178,6 +199,7 @@ public class BLevelParameters implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = (prime * result) + ((certifiedSignerRoles == null) ? 0 : certifiedSignerRoles.hashCode());
 		result = (prime * result) + ((claimedSignerRoles == null) ? 0 : claimedSignerRoles.hashCode());
 		result = (prime * result) + ((commitmentTypeIndications == null) ? 0 : commitmentTypeIndications.hashCode());
 		result = (prime * result) + ((signaturePolicy == null) ? 0 : signaturePolicy.hashCode());
@@ -199,6 +221,13 @@ public class BLevelParameters implements Serializable {
 			return false;
 		}
 		BLevelParameters other = (BLevelParameters) obj;
+		if (certifiedSignerRoles == null) {
+			if (other.certifiedSignerRoles != null) {
+				return false;
+			}
+		} else if (!certifiedSignerRoles.equals(other.certifiedSignerRoles)) {
+			return false;
+		}
 		if (claimedSignerRoles == null) {
 			if (other.claimedSignerRoles != null) {
 				return false;
@@ -243,8 +272,8 @@ public class BLevelParameters implements Serializable {
 	@Override
 	public String toString() {
 		return "BLevelParameters [trustAnchorBPPolicy=" + trustAnchorBPPolicy + ", signingDate=" + signingDate + ", claimedSignerRoles=" + claimedSignerRoles
-				+ ", signaturePolicy=" + signaturePolicy + ", commitmentTypeIndication=" + commitmentTypeIndications + ", signerLocation=" + signerLocation
-				+ "]";
+				+ ", certifiedSignerRoles=" + certifiedSignerRoles + ", signaturePolicy=" + signaturePolicy + ", commitmentTypeIndication="
+				+ commitmentTypeIndications + ", signerLocation=" + signerLocation + "]";
 	}
 
 }
