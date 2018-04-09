@@ -118,7 +118,7 @@ public class CAdESLevelBaselineB {
 		ASN1EncodableVector signedAttributes = new ASN1EncodableVector();
 		addSigningCertificateAttribute(parameters, signedAttributes);
 		addSigningTimeAttribute(parameters, signedAttributes);
-		addSignerAttributeV2(parameters, signedAttributes);
+		addSignerAttribute(parameters, signedAttributes);
 		addSignaturePolicyId(parameters, signedAttributes);
 		addContentHints(parameters, signedAttributes);
 		addContentIdentifier(parameters, signedAttributes);
@@ -148,20 +148,16 @@ public class CAdESLevelBaselineB {
 	 * @param signedAttributes
 	 * @return
 	 */
-	private void addSignerAttributeV2(final CAdESSignatureParameters parameters, final ASN1EncodableVector signedAttributes) {
-
-		SignerAttributeV2 sav2 = SignerAttributeV2Factory.getSignerAttributeV2(parameters.bLevel(), parameters.getDeterministicId(), padesUsage);
-
-        	final org.bouncycastle.asn1.cms.Attribute attribute = new org.bouncycastle.asn1.cms.Attribute(new ASN1ObjectIdentifier("0.4.0.19122.1.1"),
-                	new DERSet(sav2));
-
-        	signedAttributes.add(attribute);
-
-    	}
-
 	private void addSignerAttribute(final CAdESSignatureParameters parameters, final ASN1EncodableVector signedAttributes) {
-		// In PAdES, the role is in the signature dictionary
-		if (!padesUsage) {
+                       
+                if(parameters.isEn319122()){
+                        SignerAttributeV2 sav2 = SignerAttributeV2Factory.getSignerAttributeV2(parameters.bLevel(), parameters.getDeterministicId(), padesUsage);
+			org.bouncycastle.asn1.cms.Attribute signerAttributes = new org.bouncycastle.asn1.cms.Attribute(OID.id_aa_ets_signerAttrV2, new DERSet(sav2));
+                        signedAttributes.add(signerAttributes);
+                }
+                
+                // In PAdES, the role is in the signature dictionary  
+                else if (!padesUsage) {
 
 			final List<String> claimedSignerRoles = parameters.bLevel().getClaimedSignerRoles();
 			if (claimedSignerRoles != null) {
@@ -173,17 +169,12 @@ public class CAdESLevelBaselineB {
 							new DERSet(roles));
 					claimedAttributes.add(id_aa_ets_signerAttr);
 				}
-				org.bouncycastle.asn1.cms.Attribute signerAttributes;
-				if (!parameters.isEn319122()) {
-					signerAttributes = new org.bouncycastle.asn1.cms.Attribute(id_aa_ets_signerAttr,
+				
+                                org.bouncycastle.asn1.cms.Attribute	signerAttributes = new org.bouncycastle.asn1.cms.Attribute(id_aa_ets_signerAttr,
 							new DERSet(new SignerAttribute(claimedAttributes.toArray(new org.bouncycastle.asn1.x509.Attribute[claimedAttributes.size()]))));
-				} else {
-					signerAttributes = new org.bouncycastle.asn1.cms.Attribute(OID.id_aa_ets_signerAttrV2,
-							new DERSet(new SignerAttributeV2(claimedAttributes.toArray(new org.bouncycastle.asn1.x509.Attribute[claimedAttributes.size()]))));
-				}
-				signedAttributes.add(signerAttributes);
+                                signedAttributes.add(signerAttributes);				
 			}
-		}
+		}               
 	}
 
 	private void addSigningTimeAttribute(final CAdESSignatureParameters parameters, final ASN1EncodableVector signedAttributes) {
