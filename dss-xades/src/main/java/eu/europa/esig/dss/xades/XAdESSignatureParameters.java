@@ -31,6 +31,7 @@ public class XAdESSignatureParameters extends AbstractSignatureParameters {
 	private List<DSSReference> dssReferences;
 
 	private String xPathLocationString;
+        private String xPathElementPlacement;
 
 	/**
 	 * In case of ENVELOPING signature, this parameter allows to include the complete XML and not its base64 encoded
@@ -201,5 +202,13 @@ public class XAdESSignatureParameters extends AbstractSignatureParameters {
 	public void setSignedAdESObject(byte[] signedAdESObject) {
 		this.signedAdESObject = signedAdESObject;
 	}
+        
+        public String getxPathElementPlacement() {
+                return xPathElementPlacement;
+        }
+
+        public void setxPathElementPlacement(String xPathElementPlacement) {
+                this.xPathElementPlacement = xPathElementPlacement;
+        }
 
 }

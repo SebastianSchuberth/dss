@@ -224,7 +224,22 @@ public abstract class XAdESSignatureBuilder extends XAdESBuilder implements Sign
 		signatureDom.setAttribute(ID, deterministicId);
 
 		final Node parentNodeOfSignature = getParentNodeOfSignature();
-		parentNodeOfSignature.appendChild(signatureDom);
+		
+                if(params.getxPathElementPlacement() != null && !params.getxPathElementPlacement().trim().isEmpty()){
+                
+                    switch(params.getxPathElementPlacement()){
+                        case "After":   //insert after the element referenced by the XPath 
+                                        Node parent = parentNodeOfSignature.getParentNode();
+                                        if(parent != null){
+                                                parent.insertBefore(signatureDom, parentNodeOfSignature.getNextSibling());
+                                        } break;
+                        case "FirstChildOf":    //insert as the first child of the element referenced by the XPath 
+                                                parentNodeOfSignature.insertBefore(signatureDom, parentNodeOfSignature.getFirstChild()); break;
+                        default: parentNodeOfSignature.appendChild(signatureDom); break;
+                    }            
+                } else {              
+                    parentNodeOfSignature.appendChild(signatureDom);               
+                }        
 	}
 
 	protected Node getParentNodeOfSignature() {
