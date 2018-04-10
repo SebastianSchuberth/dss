@@ -89,6 +89,8 @@ public abstract class XAdESBuilder {
 	public static final String XADES_CITY = "xades:City";
 	public static final String XADES_CLAIMED_ROLES = "xades:ClaimedRoles";
 	public static final String XADES_CLAIMED_ROLE = "xades:ClaimedRole";
+	public static final String XADES_SIGNED_ASSERTIONS = "xades:SignedAssertions";
+	public static final String XADES_SIGNED_ASSERTION = "xades:SignedAssertion";
 	public static final String XADES_COMMITMENT_TYPE_ID = "xades:CommitmentTypeId";
 	public static final String XADES_COMMITMENT_TYPE_INDICATION = "xades:CommitmentTypeIndication";
 	public static final String XADES_COUNTRY_NAME = "xades:CountryName";

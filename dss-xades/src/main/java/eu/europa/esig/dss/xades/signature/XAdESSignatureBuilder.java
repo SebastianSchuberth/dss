@@ -850,9 +850,11 @@ public abstract class XAdESSignatureBuilder extends XAdESBuilder implements Sign
 	private void incorporateSignerRole() {
 
 		final List<String> claimedSignerRoles = params.bLevel().getClaimedSignerRoles();
+		final List<String> signedAssertions = params.bLevel().getSignedAssertions();
+		
+		Element signerRoleDom = null;
+		
 		if (claimedSignerRoles != null) {
-
-			final Element signerRoleDom;
 
 			if (params.isEn319132()) {
 				signerRoleDom = DomUtils.addElement(documentDom, signedSignaturePropertiesDom, XAdES, XADES_SIGNER_ROLE_V2);
@@ -864,9 +866,19 @@ public abstract class XAdESSignatureBuilder extends XAdESBuilder implements Sign
 				final Element claimedRolesDom = DomUtils.addElement(documentDom, signerRoleDom, XAdES, XADES_CLAIMED_ROLES);
 				addRoles(claimedSignerRoles, claimedRolesDom, XADES_CLAIMED_ROLE);
 			}
-
 		}
+		
+		if (signedAssertions != null && params.isEn319132()) {
 
+			if(signerRoleDom == null){
+			    signerRoleDom = DomUtils.addElement(documentDom, signedSignaturePropertiesDom, XAdES, XADES_SIGNER_ROLE_V2);
+			}
+
+			if (Utils.isCollectionNotEmpty(signedAssertions)) {
+				final Element signedAssertionsDom = DomUtils.addElement(documentDom, signerRoleDom, XAdES, XADES_SIGNED_ASSERTIONS);
+				addAssertions(signedAssertions, signedAssertionsDom, XADES_SIGNED_ASSERTION);
+			}
+		}
 	}
 
 	private void addRoles(final List<String> signerRoles, final Element rolesDom, final String roleType) {
@@ -874,7 +886,19 @@ public abstract class XAdESSignatureBuilder extends XAdESBuilder implements Sign
 		for (final String signerRole : signerRoles) {
 
 			final Element roleDom = DomUtils.addElement(documentDom, rolesDom, XAdES, roleType);
-			DomUtils.setTextNode(documentDom, roleDom, signerRole);
+			DomUtils.setTextNode(documentDom, roleDom, signerRole);			
+		}
+	}
+	
+	private void addAssertions(final List<String> signedAssertions, final Element rolesDom, final String roleType) {
+
+		for (final String signedAssertion : signedAssertions) {
+
+			final Element roleDom = DomUtils.addElement(documentDom, rolesDom, XAdES, roleType);			
+			Document samlAssertion = DomUtils.buildDOM(signedAssertion);
+			Element docEl = samlAssertion.getDocumentElement();
+			Node node = documentDom.importNode(docEl, true);
+			roleDom.appendChild(node);
 		}
 	}
 
