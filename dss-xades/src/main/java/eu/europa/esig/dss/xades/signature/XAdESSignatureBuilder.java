@@ -760,7 +760,7 @@ public abstract class XAdESSignatureBuilder extends XAdESBuilder implements Sign
 
 		for (final CertificateToken certificate : certificates) {
 			final Element certDom = incorporateCert(signingCertificateDom, certificate);
-			incorporateIssuerV2(certDom, certificate);
+			//incorporateIssuerV2(certDom, certificate);
 		}
 	}
 
