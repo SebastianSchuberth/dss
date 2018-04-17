@@ -62,6 +62,7 @@ import eu.europa.esig.dss.xades.ProfileParameters;
 import eu.europa.esig.dss.xades.ProfileParameters.Operation;
 import eu.europa.esig.dss.xades.XAdESSignatureParameters;
 import eu.europa.esig.dss.xades.validation.XAdESSignature;
+import org.w3c.dom.Node;
 
 /**
  * -T profile of XAdES signature
@@ -125,6 +126,11 @@ public class XAdESLevelBaselineT extends ExtensionBuilder implements SignatureEx
 		for (int ii = 0; ii < signatureNodeList.getLength(); ii++) {
 
 			currentSignatureDom = (Element) signatureNodeList.item(ii);
+			
+			if(isAlreadyInDSObject(currentSignatureDom)){
+			    continue;
+			}
+			
 			final String currentSignatureId = currentSignatureDom.getAttribute(ID);
 			if ((signatureId != null) && !signatureId.equals(currentSignatureId)) {
 
@@ -309,6 +315,21 @@ public class XAdESLevelBaselineT extends ExtensionBuilder implements SignatureEx
 
 	private boolean isOldGeneration(SignatureLevel signatureLevel) {
 		return SignatureLevel.XAdES_X.equals(signatureLevel) || SignatureLevel.XAdES_XL.equals(signatureLevel) || SignatureLevel.XAdES_A.equals(signatureLevel);
+	}
+	
+	private boolean isAlreadyInDSObject(Node el){
+	
+	    Node parent = el;
+	    
+	    while (parent.getParentNode() != null){
+	    
+		parent = parent.getParentNode();
+		if(parent.getNodeName().equals(DS_OBJECT)){
+		    return true;
+		}	   
+	    } 
+	    
+	    return false;
 	}
 
 }
