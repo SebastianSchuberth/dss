@@ -185,8 +185,17 @@ class PdfBoxSignatureService implements PDFSignatureService {
 			} else {
 				visibleSig.width(ires.toXPoint(visibleSig.getWidth()));
 				visibleSig.height(ires.toYPoint(visibleSig.getHeight()));
+			}			
+			visibleSig.zoom(signatureImageParameters.getZoom() - 100); // pdfbox is 0 based			
+			
+			PDPage pdPage = doc.getPages().get(signatureImageParameters.getPage() - 1);
+			int rotation = SignatureImageAndPositionProcessor.getRotation(signatureImageParameters.getRotation(), pdPage);
+
+			if(rotation == 90 || rotation == 270) { //switch height and width
+			    float temp = visibleSig.getHeight();
+			    visibleSig.height(visibleSig.getWidth());
+			    visibleSig.width(temp);
 			}
-			visibleSig.zoom(signatureImageParameters.getZoom() - 100); // pdfbox is 0 based
 
 			PDVisibleSigProperties signatureProperties = new PDVisibleSigProperties();
 			signatureProperties.visualSignEnabled(true).setPdVisibleSignature(visibleSig).buildSignature();

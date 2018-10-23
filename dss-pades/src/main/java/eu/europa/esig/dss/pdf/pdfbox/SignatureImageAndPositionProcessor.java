@@ -108,10 +108,10 @@ public class SignatureImageAndPositionProcessor {
         switch (alignmentVertical) {
             case TOP:
             case NONE:
-                x = mediaBox.getWidth() - ires.toXPoint(visualImageSignature.getWidth()) - signatureImageParameters.getyAxis();
+                x = mediaBox.getWidth() - getSignatureHeight(ires, signatureImageParameters, visualImageSignature)- signatureImageParameters.getyAxis();
                 break;
             case MIDDLE:
-                x = (mediaBox.getWidth() - ires.toXPoint(visualImageSignature.getWidth())) / 2;
+                x = (mediaBox.getWidth() - getSignatureHeight(ires, signatureImageParameters, visualImageSignature)) / 2;
                 break;
             case BOTTON:
                 x = signatureImageParameters.getyAxis();
@@ -131,10 +131,10 @@ public class SignatureImageAndPositionProcessor {
         switch (alignmentHorizontal) {
             case LEFT:
             case NONE:
-                x = mediaBox.getWidth() - ires.toXPoint(visualImageSignature.getWidth()) - signatureImageParameters.getxAxis();
+                x = mediaBox.getWidth() - getSignatureWidth(ires, signatureImageParameters, visualImageSignature) - signatureImageParameters.getxAxis();
                 break;
             case CENTER:
-                x = (mediaBox.getWidth() - ires.toXPoint(visualImageSignature.getWidth())) / 2;
+                x = (mediaBox.getWidth() - getSignatureWidth(ires, signatureImageParameters, visualImageSignature)) / 2;
                 break;
             case RIGHT:
                 x = signatureImageParameters.getxAxis();
@@ -157,10 +157,10 @@ public class SignatureImageAndPositionProcessor {
                 x = signatureImageParameters.getyAxis();
                 break;
             case MIDDLE:
-                x = (mediaBox.getWidth() - ires.toXPoint(visualImageSignature.getWidth())) / 2;
+                x = (mediaBox.getWidth() - getSignatureWidth(ires, signatureImageParameters, visualImageSignature)) / 2;
                 break;
             case BOTTON:
-                x = mediaBox.getWidth() - ires.toXPoint(visualImageSignature.getWidth()) - signatureImageParameters.getyAxis();
+                x = mediaBox.getWidth() - getSignatureWidth(ires, signatureImageParameters, visualImageSignature) - signatureImageParameters.getyAxis();
                 break;
             default:
                 throw new IllegalStateException(SUPPORTED_VERTICAL_ALIGNMENT_ERROR_MESSAGE + alignmentVertical.name());
@@ -180,10 +180,10 @@ public class SignatureImageAndPositionProcessor {
                 x = signatureImageParameters.getxAxis();
                 break;
             case CENTER:
-                x = (mediaBox.getWidth() - ires.toXPoint(visualImageSignature.getWidth())) / 2;
+                x = (mediaBox.getWidth() - getSignatureWidth(ires, signatureImageParameters, visualImageSignature)) / 2;
                 break;
             case RIGHT:
-                x = mediaBox.getWidth() -ires.toXPoint(visualImageSignature.getWidth()) - signatureImageParameters.getxAxis();
+                x = mediaBox.getWidth() -getSignatureWidth(ires, signatureImageParameters, visualImageSignature) - signatureImageParameters.getxAxis();
                 break;
             default:
                 throw new IllegalStateException(SUPPORTED_HORIZONTAL_ALIGNMENT_ERROR_MESSAGE + alignmentHorizontal.name());
@@ -203,10 +203,10 @@ public class SignatureImageAndPositionProcessor {
                 y = signatureImageParameters.getxAxis();
                 break;
             case CENTER:
-                y = (mediaBox.getHeight() - ires.toXPoint(visualImageSignature.getHeight())) / 2;
+                y = (mediaBox.getHeight() - getSignatureHeight(ires, signatureImageParameters, visualImageSignature)) / 2;
                 break;
             case RIGHT:
-                y = mediaBox.getHeight() - ires.toYPoint(visualImageSignature.getHeight()) - signatureImageParameters.getxAxis();
+                y = mediaBox.getHeight() - getSignatureHeight(ires, signatureImageParameters, visualImageSignature) - signatureImageParameters.getxAxis();
                 break;
             default:
                 throw new IllegalStateException(SUPPORTED_HORIZONTAL_ALIGNMENT_ERROR_MESSAGE + alignmentHorizontal.name());
@@ -223,10 +223,10 @@ public class SignatureImageAndPositionProcessor {
         switch (alignmentVertical) {
             case TOP:
             case NONE:
-                y = mediaBox.getHeight() - ires.toYPoint(visualImageSignature.getHeight()) - signatureImageParameters.getyAxis();
+                y = mediaBox.getHeight() - getSignatureHeight(ires, signatureImageParameters, visualImageSignature) - signatureImageParameters.getyAxis();
                 break;
             case MIDDLE:
-                y = (mediaBox.getHeight() - ires.toYPoint(visualImageSignature.getHeight())) / 2;
+                y = (mediaBox.getHeight() - getSignatureHeight(ires, signatureImageParameters, visualImageSignature)) / 2;
                 break;
             case BOTTON:
                 y = signatureImageParameters.getyAxis();
@@ -246,10 +246,10 @@ public class SignatureImageAndPositionProcessor {
         switch (alignmentHorizontal) {
             case LEFT:
             case NONE:
-                y = mediaBox.getHeight() - ires.toYPoint(visualImageSignature.getHeight()) - signatureImageParameters.getxAxis();
+                y = mediaBox.getHeight() - getSignatureWidth(ires, signatureImageParameters, visualImageSignature) - signatureImageParameters.getxAxis();
                 break;
             case CENTER:
-                y = (mediaBox.getHeight() - ires.toXPoint(visualImageSignature.getHeight())) / 2;
+                y = (mediaBox.getHeight() - getSignatureWidth(ires, signatureImageParameters, visualImageSignature)) / 2;
                 break;
             case RIGHT:
                 y = signatureImageParameters.getxAxis();
@@ -272,10 +272,10 @@ public class SignatureImageAndPositionProcessor {
                 y = signatureImageParameters.getyAxis();
                 break;
             case MIDDLE:
-                y = (mediaBox.getHeight() - ires.toYPoint(visualImageSignature.getHeight())) / 2;
+                y = (mediaBox.getHeight() - getSignatureHeight(ires, signatureImageParameters, visualImageSignature)) / 2;
                 break;
             case BOTTON:
-                y = mediaBox.getHeight() - ires.toYPoint(visualImageSignature.getHeight()) - signatureImageParameters.getyAxis();
+                y = mediaBox.getHeight() - getSignatureHeight(ires, signatureImageParameters, visualImageSignature) - signatureImageParameters.getyAxis();
                 break;
             default:
                 throw new IllegalStateException(SUPPORTED_VERTICAL_ALIGNMENT_ERROR_MESSAGE + alignmentVertical.name());
@@ -306,7 +306,7 @@ public class SignatureImageAndPositionProcessor {
         return visualSignatureRotation != null && !SignatureImageParameters.VisualSignatureRotation.NONE.equals(visualSignatureRotation);
     }
 
-    private static int getRotation(SignatureImageParameters.VisualSignatureRotation visualSignatureRotation, PDPage pdPage) {
+    public static int getRotation(SignatureImageParameters.VisualSignatureRotation visualSignatureRotation, PDPage pdPage) {
         int rotate = ANGLE_360;
 
         if(needRotation(visualSignatureRotation)) {
@@ -329,5 +329,21 @@ public class SignatureImageAndPositionProcessor {
         }
 
         return rotate;
+    }
+
+    private static float getSignatureWidth(ImageAndResolution ires, SignatureImageParameters signatureImageParameters, BufferedImage visualImageSignature) {
+	if(signatureImageParameters.getWidth() > 0) {
+	    return signatureImageParameters.getWidth();
+	}
+
+	return ires.toXPoint(visualImageSignature.getWidth());
+    }
+
+    private static float getSignatureHeight(ImageAndResolution ires, SignatureImageParameters signatureImageParameters, BufferedImage visualImageSignature) {
+	if(signatureImageParameters.getHeight() > 0) {
+	    return signatureImageParameters.getHeight();
+	}
+
+	return ires.toXPoint(visualImageSignature.getHeight());
     }
 }
